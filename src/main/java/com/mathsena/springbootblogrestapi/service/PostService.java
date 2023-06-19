@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 public interface PostService {
     PostDto createPost(PostDto postDto);
 
-    PostResponse getAllPosts(int pageNo, int pageSize);
+    PostResponse getAllPosts(int pageNo, int pageSize, String sortBy);
 
     PostDto getPostById(long id);
 
