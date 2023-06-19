@@ -3,6 +3,7 @@ package com.mathsena.springbootblogrestapi.service.impl;
 import com.mathsena.springbootblogrestapi.entity.Post;
 import com.mathsena.springbootblogrestapi.exception.ResourceNotFoundException;
 import com.mathsena.springbootblogrestapi.payload.PostDto;
+import com.mathsena.springbootblogrestapi.payload.PostResponse;
 import com.mathsena.springbootblogrestapi.repository.PostRepository;
 import com.mathsena.springbootblogrestapi.service.PostService;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto> getAllPosts(int pageNo, int pageSize) {
+    public PostResponse getAllPosts(int pageNo, int pageSize) {
 
         // Create Pageable instace
         Pageable pageable = PageRequest.of(pageNo, pageSize);
@@ -45,7 +46,16 @@ public class PostServiceImpl implements PostService {
 
         // get content for page object
         List<Post> listOfPost = posts.getContent();
-        return listOfPost.stream().map(this::mapToDto).collect(Collectors.toList());
+        List<PostDto> content = listOfPost.stream().map(this::mapToDto).collect(Collectors.toList());
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(content);
+        postResponse.setPageNo(posts.getNumber());
+        postResponse.setPageSize(posts.getSize());
+        postResponse.setTotalElements(postResponse.getTotalElements());
+        postResponse.setTotalPages(postResponse.getTotalPages());
+        postResponse.setLast(postResponse.isLast());
+
+        return postResponse;
     }
 
     @Override

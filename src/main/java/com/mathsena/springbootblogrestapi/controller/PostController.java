@@ -1,12 +1,11 @@
 package com.mathsena.springbootblogrestapi.controller;
 
 import com.mathsena.springbootblogrestapi.payload.PostDto;
+import com.mathsena.springbootblogrestapi.payload.PostResponse;
 import com.mathsena.springbootblogrestapi.service.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -27,7 +26,7 @@ public class PostController {
 
     // Getting all posts
     @GetMapping()
-    public List<PostDto> getAllPosts(
+    public PostResponse getAllPosts(
             @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
 
