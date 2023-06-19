@@ -5,6 +5,9 @@ import com.mathsena.springbootblogrestapi.exception.ResourceNotFoundException;
 import com.mathsena.springbootblogrestapi.payload.PostDto;
 import com.mathsena.springbootblogrestapi.repository.PostRepository;
 import com.mathsena.springbootblogrestapi.service.PostService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,14 +32,20 @@ public class PostServiceImpl implements PostService {
         Post newPost = postRepository.save(post);
 
         // convert entity to DTO
-        PostDto postResponse = mapToDto(newPost);
-        return postResponse;
+        return mapToDto(newPost);
     }
 
     @Override
-    public List<PostDto> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
-        return posts.stream().map(this::mapToDto).collect(Collectors.toList());
+    public List<PostDto> getAllPosts(int pageNo, int pageSize) {
+
+        // Create Pageable instace
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+
+        Page<Post> posts = postRepository.findAll(pageable);
+
+        // get content for page object
+        List<Post> listOfPost = posts.getContent();
+        return listOfPost.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
     @Override
